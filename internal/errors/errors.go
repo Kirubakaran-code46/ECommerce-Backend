@@ -8,30 +8,30 @@ import (
 type ErrorCode string
 
 const (
-	CodeInvalidRequest       ErrorCode = "INVALID_REQUEST"
-	CodeProductNotFound      ErrorCode = "PRODUCT_NOT_FOUND"
-	CodeInsufficientStock    ErrorCode = "INSUFFICIENT_STOCK"
-	CodeEmptyCart            ErrorCode = "EMPTY_CART"
-	CodeInvalidQuantity      ErrorCode = "INVALID_QUANTITY"
-	CodeInvalidCoupon        ErrorCode = "INVALID_COUPON"
-	CodeExpiredCoupon        ErrorCode = "EXPIRED_COUPON"
-	CodeInactiveCoupon       ErrorCode = "INACTIVE_COUPON"
-	CodeMinCartValueNotMet   ErrorCode = "MIN_CART_VALUE_NOT_MET"
-	CodeInternalServerError  ErrorCode = "INTERNAL_SERVER_ERROR"
+	CodeInvalidRequest      ErrorCode = "INVALID_REQUEST"
+	CodeProductNotFound     ErrorCode = "PRODUCT_NOT_FOUND"
+	CodeInsufficientStock   ErrorCode = "INSUFFICIENT_STOCK"
+	CodeEmptyCart           ErrorCode = "EMPTY_CART"
+	CodeInvalidQuantity     ErrorCode = "INVALID_QUANTITY"
+	CodeInvalidCoupon       ErrorCode = "INVALID_COUPON"
+	CodeExpiredCoupon       ErrorCode = "EXPIRED_COUPON"
+	CodeInactiveCoupon      ErrorCode = "INACTIVE_COUPON"
+	CodeMinCartValueNotMet  ErrorCode = "MIN_CART_VALUE_NOT_MET"
+	CodeInternalServerError ErrorCode = "INTERNAL_SERVER_ERROR"
 )
 
 type AppError struct {
-	Code       ErrorCode   `json:"code"`
-	Message    string      `json:"message"`
-	HTTPStatus int         `json:"-"`
-	Details    interface{} `json:"details,omitempty"`
+	Code       ErrorCode `json:"code"`
+	Message    string    `json:"message"`
+	HTTPStatus int       `json:"-"`
+	Details    any       `json:"details,omitempty"`
 }
 
 func (e *AppError) Error() string {
 	return fmt.Sprintf("[%s] %s", e.Code, e.Message)
 }
 
-func New(code ErrorCode, message string, httpStatus int, details interface{}) *AppError {
+func New(code ErrorCode, message string, httpStatus int, details any) *AppError {
 	return &AppError{
 		Code:       code,
 		Message:    message,
@@ -54,7 +54,7 @@ func ErrInsufficientStock(productName string, requested, available int) *AppErro
 		CodeInsufficientStock,
 		fmt.Sprintf("Insufficient stock for '%s'. Requested: %d, Available: %d", productName, requested, available),
 		http.StatusConflict,
-		map[string]interface{}{
+		map[string]any{
 			"product_name": productName,
 			"requested":    requested,
 			"available":    available,
