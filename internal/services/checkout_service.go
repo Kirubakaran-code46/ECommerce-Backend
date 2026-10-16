@@ -149,10 +149,7 @@ func (s *checkoutService) CalculateCheckout(ctx context.Context, req models.Chec
 	}
 
 	// 6. Final calculation
-	total := subtotal - discount
-	if total < 0 {
-		total = 0
-	}
+	total := max(subtotal-discount, 0)
 
 	return &models.CheckoutResponse{
 		Items:    itemsResponse,

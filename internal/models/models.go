@@ -68,9 +68,9 @@ type CheckoutResponse struct {
 
 // Envelope responses
 type APIResponse struct {
-	Data interface{} `json:"data"`
+	Data any `json:"data"`
 }
 
 type APIErrorEnvelope struct {
-	Error interface{} `json:"error"`
+	Error any `json:"error"`
 }
